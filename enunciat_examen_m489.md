@@ -100,7 +100,25 @@ Què passaria si el servidor de l'API trigués 60 segons a respondre? L'aplicaci
 ```dart
 // Escriu la modificació al getCarsPage aquí:
 Future<List<CarsModel>> getCarsPage(int page, int limit) async {
-  
+  final offset = (page - 1) * limit;
+  final uri = _buildUri('/v1/cars', {'limit': '$limit', 'offset': '$offset'});
+
+  try {
+    final response = await http
+        .get(uri, headers: _headers)
+        .timeout(const Duration(seconds: 10));
+
+    if (response.statusCode == 200) {
+      return CarsModel.listFromJsonString(response.body);
+    }
+
+      throw Exception('Error ${response.statusCode}: ${response.body}');
+    } on TimeoutException {
+      throw Exception('el servidor ha trigat mes de 10 segons en respondre.');
+    } catch (e) {
+      throw Exception('Error a getCarsPage: $e');
+    }
+}
 ```
 
 ---
@@ -114,7 +132,7 @@ Analitza el constructor `factory CarsModel.fromMapToCarObject(Map<String, dynami
 **Resposta:**
 
 ```
-
+Resoldria el problema amb una funció que utilitzaria cada vegada que llegim la API, amb una condició, que si no es valor integer salti un error indicant amb un missatge que el valor introduit en el parametre no es un Integer 
 ```
 
 ---
@@ -124,7 +142,7 @@ Analitza el constructor `factory CarsModel.fromMapToCarObject(Map<String, dynami
 **Resposta:**
 
 ```
-
+És millor simular JSON en un test unitari per l'aillament, el test no depèn de la xarxa, per la reproductibilitat sempre s'executa amb les mateixes dades i perque és més ràpid executar tests locals amb dades mock és molt més ràpid que fer-les a HTTP.
 ```
 
 ---
