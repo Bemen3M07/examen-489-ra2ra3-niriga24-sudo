@@ -20,11 +20,17 @@ class CarsModel {
     required this.color,
   });
 
+  static int _parseInt(dynamic value, {int fallback = 0}) {
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? fallback;
+    return fallback;
+  }
+
   /// Converteix un Map (JSON) en un objecte CarsModel
   factory CarsModel.fromMapToCarObject(Map<String, dynamic> json) {
     return CarsModel(
-      id: json['id'] as int,
-      year: json['year'] as int,
+      id: _parseInt(json['id']),
+      year: _parseInt(json['year']),
       make: json['make'] as String? ?? '',
       model: json['model'] as String? ?? '',
       type: json['type'] as String? ?? '',

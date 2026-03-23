@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/car_model.dart';
@@ -59,14 +60,53 @@ class CarHttpService {
     final offset = (page - 1) * limit;
     final uri = _buildUri('/v1/cars', {'limit': '$limit', 'offset': '$offset'});
 
-    final response = await http
-        .get(uri, headers: _headers)
-        .timeout(const Duration(seconds: 10));
+    try {
+      final response = await http
+          .get(uri, headers: _headers)
+          .timeout(const Duration(seconds: 10));
 
-    if (response.statusCode == 200) {
-      return CarsModel.listFromJsonString(response.body);
-    } else {
+      if (response.statusCode == 200) {
+        return CarsModel.listFromJsonString(response.body);
+      }   
       throw Exception('Error ${response.statusCode}: ${response.body}');
+    } on TimeoutException {
+      throw Exception('el servidor ha trigat mes de 10 segons en respondre.');
+    } catch (e) {
+      throw Exception('Error a getCarsPage: $e');
+    }
+  }
+
+  /// Cerca cotxes per marca i/o model (paràmetres opcionals)
+  Future<List<CarsModel>> getCarsByFilter({String? make, String? model}) async {
+    final queryParams = <String, String>{};
+
+    if (make != null && make.trim().isNotEmpty) {
+      queryParams['make'] = make.trim();
+    }
+    if (model != null && model.trim().isNotEmpty) {
+      queryParams['model'] = model.trim();
+    }
+
+    final uri = _buildUri('/v1/cars/search', queryParams);
+
+    try {
+      final response = await http
+          .get(uri, headers: _headers)
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return CarsModel.listFromJsonString(response.body);
+      }
+
+      throw Exception('Error ${response.statusCode}: ${response.body}');
+    } on FormatException catch (e) {
+      throw Exception('Resposta JSON no valida: $e');
+    } on http.ClientException catch (e) {
+      throw Exception('Error de connexio HTTP: $e');
+    } on TimeoutException {
+      throw Exception('Timeout: el servidor ha trigat mes de 10 segons.');
+    } catch (e) {
+      throw Exception('Error inesperat a getCarsByFilter: $e');
     }
   }
 }

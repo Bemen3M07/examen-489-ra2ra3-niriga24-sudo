@@ -4,11 +4,11 @@
 
 **Unitats Formatives:** RA2 i RA3  
 **Curs:** 2n DAM · Videojocs  
-**Data:** ____________________  
+**Data:** _______23/03/2026_____________  
 **Durada:** 2 hores  
 
-**Alumne/a:** ________________________________________________  
-**Grup:** __________________________________________________  
+**Alumne/a:** _________Nicolas Alejandro Rios Garcia_______________________________________  
+**Grup:** _______________DAM 2n___________________________________  
 
 ---
 
@@ -42,7 +42,13 @@ Al projecte **Cars**, el widget `CarsPage` gestiona el número de pàgina actual
 **Resposta:**
 
 ```
-[Escriu la teva resposta aquí]
+setState notifica a Flutter que l'estat intern del "State" ha canviat. Quan el cridem flutter marca el widget com a "dirty" i torna a executar build, de manera que la UI es refresca amb els nous valors.
+
+A `_loadPage()` es fan dues crides separades perquè representen dos moments diferents:
+1) Inici de la petició: "_isloading = true" i "_error = null".
+2) Final de la petició: actualitzar dades (_cars) o error (_error) i posar "_isloading = false".
+
+Si fas una sola crida, l'usuari no veuria l'estat de càrrega mentre espera la resposta de xarxa.
 ```
 
 ---
@@ -56,7 +62,12 @@ Al projecte **Camera**, el widget `CameraScreen` utilitza un `CameraController` 
 **Resposta:**
 
 ```
-[Escriu la teva resposta aquí]
+S'utilitza dispose()
+
+void dispose() {
+  _controller.dispose();
+  super.dispose();
+}
 ```
 
 ---
@@ -70,7 +81,8 @@ Al projecte **Camera**, el widget `CameraScreen` utilitza un `CameraController` 
 **Resposta:**
 
 ```
-[Escriu la teva resposta aquí]
+No es pot fer "await" en initState() perquè ha de ser síncrona, i flutter necessita que retorni.
+FutureBuilder no bloqueixa el fil principal
 ```
 
 ---
@@ -88,8 +100,7 @@ Què passaria si el servidor de l'API trigués 60 segons a respondre? L'aplicaci
 ```dart
 // Escriu la modificació al getCarsPage aquí:
 Future<List<CarsModel>> getCarsPage(int page, int limit) async {
-  // ...
-}
+  
 ```
 
 ---
@@ -103,7 +114,7 @@ Analitza el constructor `factory CarsModel.fromMapToCarObject(Map<String, dynami
 **Resposta:**
 
 ```
-[Escriu la teva resposta aquí]
+
 ```
 
 ---
@@ -113,7 +124,7 @@ Analitza el constructor `factory CarsModel.fromMapToCarObject(Map<String, dynami
 **Resposta:**
 
 ```
-[Escriu la teva resposta aquí]
+
 ```
 
 ---
@@ -135,14 +146,7 @@ Imagina que volem crear una pantalla de detall per a cada cotxe del projecte Car
 // Escriu el teu codi aquí:
 
 class CarDetailPage extends StatelessWidget {
-  final CarsModel car;
 
-  const CarDetailPage({super.key, required this.car});
-
-  @override
-  Widget build(BuildContext context) {
-    // implementa aquí
-  }
 }
 ```
 
@@ -192,6 +196,8 @@ Requisits:
 
 ```dart
 // Escriu aquí la teva implementació completa del mètode:
+Future<List<CarsModel>> getCarsByFilter({String? make, String? model}) async {
+}
 
 ```
 

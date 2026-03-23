@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/car_model.dart';
+import 'car_detail_page.dart';
 
 /// Widget de presentació de la llista de cotxes.
 ///
@@ -50,6 +51,13 @@ class CarsList extends StatelessWidget {
             car.color,
             style: const TextStyle(color: Colors.blueGrey),
           ),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => CarDetailPage(car: car),
+              ),
+            );
+          },
         );
       },
     );

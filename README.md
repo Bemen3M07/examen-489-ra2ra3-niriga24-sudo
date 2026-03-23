@@ -61,3 +61,12 @@ flutter run -d chrome
 ```
 
 > L'aplicació s'obrirà a Chrome amb dues pestanyes: **Cars** (llista paginada de cotxes) i **Phone** (permisos i cicle de vida).
+
+---
+
+## Evidència C1 (estructura i configuració)
+
+- Estructura modular per funcionalitat: `lib/cars/models`, `lib/cars/services`, `lib/cars/views`, `lib/camera/views`.
+- Dependències de `pubspec.yaml` ajustades al projecte: `http` per Cars i `camera`/`path_provider`/`path` per Camera.
+- Permisos Android mínims i justificats: només `android.permission.CAMERA` a `android/app/src/main/AndroidManifest.xml`.
+- No s'han afegit permisos de xarxa, ubicació o emmagatzematge addicionals perquè no són necessaris per al cas d'ús actual.
