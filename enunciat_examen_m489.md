@@ -164,7 +164,50 @@ Imagina que volem crear una pantalla de detall per a cada cotxe del projecte Car
 // Escriu el teu codi aquí:
 
 class CarDetailPage extends StatelessWidget {
+  final CarsModel car;
 
+  const CarDetailPage({super.key, required this.car});
+
+  @override
+  Widget build(BuildContext context) {
+    final iconData = car.type == 'SUV'
+        ? Icons.directions_car
+        : Icons.car_rental;
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Detall del cotxe')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${car.make} ${car.model}',
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Icon(iconData, size: 48),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Cotxe seleccionat: ${car.make} ${car.model}',
+                    ),
+                  ),
+                );
+              },
+              child: const Text('Seleccionar cotxe'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 ```
 
