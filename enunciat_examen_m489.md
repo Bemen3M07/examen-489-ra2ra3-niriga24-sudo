@@ -258,6 +258,29 @@ Requisits:
 ```dart
 // Escriu aquí la teva implementació completa del mètode:
 Future<List<CarsModel>> getCarsByFilter({String? make, String? model}) async {
+  final queryParametros = <String, String>{};
+
+  if (make != null && make.trim().isNotEmpty) {
+    queryParametros['make'] = make.trim();
+  }
+  if (model != null && model.trim().isNotEmpty) {
+    queryParametros['model'] = model.trim();
+  }
+
+  final uri = _buildUri('/v1/cars/search', queryParametros);
+
+  try {
+    final response = await http
+        .get(uri, headers: _headers)
+        .timeout(const Duration(seconds: 10));
+
+    if (response.statusCode == 200) {
+      return CarsModel.listFromJsonString(response.body);
+    }
+
+    throw Exception('Error ${response.statusCode}: ${response.body}');
+  } on TimeoutException {
+    throw Exception('Timeout: el servidor ha trigat mes de 10 segons.');
 }
 
 ```
